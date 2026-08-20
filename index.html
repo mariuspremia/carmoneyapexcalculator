@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CarMoney APEX Calculator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --navy: #1a2332;
+    --navy-light: #243044;
+    --accent: #00b4d8;
+    --muted: #94a3b8;
+    --slate300: #cbd5e1;
+    --slate500: #64748b;
+    --slate700: #334155;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: #ffffff;
+    line-height: 1.5;
+    overflow-x: hidden;
+    padding: 16px;
+}
+
+.container {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.card {
+    background: var(--navy-light);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+
+h3 {
+    font-size: 19px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 16px;
+}
+
+.sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 32px;
+}
+
+.grid2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+label {
+    display: block;
+    color: var(--slate300);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-wrap span {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-weight: 500;
+    pointer-events: none;
+}
+
+input[type="text"] {
+    background: var(--navy);
+    border: 1.5px solid var(--slate700);
+    color: #ffffff;
+    width: 100%;
+    padding: 14px 16px 14px 32px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-family: inherit;
+    font-weight: 500;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.12);
+}
+
+input::placeholder {
+    color: #64748b;
+}
+
+/* Value bar */
+
+.bar-labels,
+.bar-values {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.small-label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.bar-outer {
+    position: relative;
+    height: 48px;
+    background: var(--navy);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.bar-full {
+    position: absolute;
+    inset: 0;
+    background: #475569;
+    border-radius: 12px;
+}
+
+.bar-settlement {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 66%;
+    background: rgba(0, 180, 216, 0.8);
+    border-radius: 12px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+}
+
+.bar-values {
+    margin-top: 8px;
+}
+
+.shortfall-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #f87171;
+    text-align: right;
+}
+
+/* Result */
+
+.result-card {
+    text-align: center;
+    border: 1px solid var(--slate700);
+    animation: pulse-glow 2s infinite;
+}
+
+.result-label {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 4px;
+}
+
+.result-amount {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 8px 0;
+    word-break: break-word;
+}
+
+.result-disclaimer {
+    color: var(--slate500);
+    font-size: 12px;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(0,180,216,.15);
+    }
+    50% {
+        box-shadow: 0 0 20px 4px rgba(0,180,216,.1);
+    }
+}
+
+/* Comparison table */
+
+.table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 500px;
+}
+
+th {
+    text-align: center;
+    color: var(--muted);
+    font-weight: 500;
+    padding-bottom: 12px;
+}
+
+th:first-child {
+    text-align: left;
+}
+
+td {
+    padding: 12px 8px;
+    border-top: 1px solid var(--slate700);
+}
+
+td:first-child {
+    color: var(--slate300);
+    padding-right: 8px;
+}
+
+.tbl-input {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    text-align: center;
+}
+
+.total-row {
+    background: rgba(26,35,50,.5);
+}
+
+.total-row td {
+    font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+}
+
+.total-row td:first-child {
+    color: #ffffff;
+    text-align: left;
+}
+
+/* Footer */
+
+footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    padding-bottom: 8px;
+}
+
+#reset-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 4px 0;
+}
+
+#reset-btn:hover {
+    color: #ffffff;
+}
+
+.footer-note {
+    color: var(--slate500);
+    font-size: 12px;
+    margin: 0;
+}
+
+/* Responsive */
+
+@media (min-width: 500px) {
+    .grid2 {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 768px) {
+    body {
+        padding: 32px;
+    }
+}
+
+@media (max-width: 499px) {
+    .card {
+        padding: 18px;
+        border-radius: 14px;
+    }
+
+    h2 {
+        font-size: 21px;
+    }
+
+    .result-amount {
+        font-size: 32px;
+    }
+
+    footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">C</div>
+        <h1>CarMoney</h1>
+    </header>
+
+    <!-- Introduction -->
+    <section>
+        <h2>See how APEX can protect your vehicle's value</h2>
+
+        <p class="sub">
+            Calculate the potential shortfall between your vehicle's original price
+            and its market value following a total loss.
+        </p>
+    </section>
+
+    <!-- Main Calculator -->
+    <section class="card">
+
+        <div class="grid2">
+
+            <div>
+                <label for="purchase-price">
+                    Vehicle Purchase Price (£)
+                </label>
+
+                <div class="input-wrap">
+                    <span>£</span>
+
+                    <input
+                        id="purchase-price"
+                        type="text"
+                        inputmode="decimal"
+                        placeholder="30,000"
+                        autocomplete="off"
+                    >
+                </div>
+            </div>
+
+            <div>
+                <label for="insurance-settlement">
+                    Motor Insurance Settlement (£)
+                </label>
+
+                <div class="input-wrap">
+                    <span>£</span>
+
+                    <input
+                        id="insurance-settlement"
+                        type="text"
+                        inputmode="decimal"
+                        placeholder="20,000"
+                        autocomplete="off"
+                    >
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Visual Value Comparison -->
+    <section class="card">
+
+        <div class="bar-labels">
+            <span class="small-label">Purchase Price</span>
+            <span class="small-label">Insurance Settlement</span>
+        </div>
+
+        <div class="bar-outer">
+
+            <div class="bar-full"></div>
+
+            <div
+                id="bar-settlement"
+                class="bar-settlement"
+            ></div>
+
+        </div>
+
+        <div class="bar-values">
+
+            <span
+                id="bar-purchase-val"
+                class="small-label"
+            >
+                £30,000
+            </span>
+
+            <span
+                id="bar-shortfall-label"
+                class="shortfall-label"
+            >
+                Shortfall: £10,000
+            </span>
+
+        </div>
+
+    </section>
+
+    <!-- Result -->
+    <section class="card result-card">
+
+        <p class="result-label">
+            Potential APEX Shortfall
+        </p>
+
+        <p
+            id="result-amount"
+            class="result-amount"
+        >
+            £10,000
+        </p>
+
+        <p class="result-disclaimer">
+            This represents the potential difference between your vehicle's
+            original purchase price and the motor insurer's settlement.
+            Illustrative calculation only.
+        </p>
+
+    </section>
+
+    <!-- Comparison -->
+    <section>
+
+        <h3>Compare your cover options</h3>
+
+        <div class="card table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Vehicle 1</th>
+                        <th>Vehicle 2</th>
+                    </tr>
+                </thead>
+
+                <tbody id="compare-body">
+
+                    <tr>
+                        <td>Purchase Price</td>
+
+                        <td>
+                            <input
+                                data-row="purchase"
+                                data-col="1"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="30,000"
+                                class="tbl-input"
+                                autocomplete="off"
+                            >
+                        </td>
+
+                        <td>
+                            <input
+                                data-row="purchase"
+                                data-col="2"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="25,000"
+                                class="tbl-input"
+                                autocomplete="off"
+                            >
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Year 1 Premium</td>
+
+                        <td>
+                            <input
+                                data-row="y1"
+                                data-col="1"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="250.00"
+                                class="tbl-input"
+                                autocomplete="off"
+                            >
+                        </td>
+
+                        <td>
+                            <input
+                                data-row="y1"
+                                data-col="2"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="200.00"
+                                class="tbl-input"
+                                autocomplete="off"
+                            >
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Year 2 Premium</td>
+
+                        <td>
+                            <input
+                                data-row="y2"
+                                data-col="1"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="250.00"
+                                class="tbl-input"
+                                autocomplete="off"
+                            >
+                        </td>
+
+                        <td>
+                            <input
+                                data-row="y2"
+                                data-col="2"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="200.00"
+                                class="tbl-input"
+                                autocomplete="off"
+                            >
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Year 3 Premium</td>
+
+                        <td>
+                            <input
+                                data-row="y3"
+                                data-col="1"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="250.00"
+                                class="tbl-input"
+                                autocomplete="off"
+                            >
+                        </td>
+
+                        <td>
+                            <input
+                                data-row="y3"
+                                data-col="2"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="200.00"
+                                class="tbl-input"
+                                autocomplete="off"
+                            >
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Year 4 Premium</td>
+
+                        <td>
+                            <input
+                                data-row="y4"
+                                data-col="1"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="250.00"
+                                class="tbl-input"
+                                autocomplete="off"
+                            >
+                        </td>
+
+                        <td>
+                            <input
+                                data-row="y4"
+                                data-col="2"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="200.00"
+                                class="tbl-input"
+                                autocomplete="off"
+                            >
+                        </td>
+                    </tr>
+
+                    <tr class="total-row">
+
+                        <td>
+                            Total Cost of Cover
+                        </td>
+
+                        <td id="total-v1">
+                            £0.00
+                        </td>
+
+                        <td id="total-v2">
+                            £0.00
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+
+        <button id="reset-btn" type="button">
+            ↺ Reset Calculator
+        </button>
+
+        <p class="footer-note">
+            Illustrative purposes only. Not a quote.
+        </p>
+
+    </footer>
+
+</div>
+
+<script>
+(function () {
+
+    function parseNumber(value) {
+        if (!value) return 0;
+
+        return parseFloat(
+            String(value).replace(/[^0-9.]/g, '')
+        ) || 0;
+    }
+
+    function formatCurrency(value, decimals) {
+        return '£' + Number(value).toLocaleString('en-GB', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        });
+    }
+
+    /* Main calculator */
+
+    var purchaseInput =
+        document.getElementById('purchase-price');
+
+    var settlementInput =
+        document.getElementById('insurance-settlement');
+
+    var resultAmount =
+        document.getElementById('result-amount');
+
+    var settlementBar =
+        document.getElementById('bar-settlement');
+
+    var purchaseValue =
+        document.getElementById('bar-purchase-val');
+
+    var shortfallLabel =
+        document.getElementById('bar-shortfall-label');
+
+
+    function calculateMain() {
+
+        var purchase =
+            parseNumber(purchaseInput.value);
+
+        var settlement =
+            parseNumber(settlementInput.value);
+
+        var shortfall =
+            Math.max(0, purchase - settlement);
+
+
+        if (purchase > 0 || settlement > 0) {
+
+            resultAmount.textContent =
+                shortfall > 0
+                    ? formatCurrency(shortfall, 0)
+                    : 'No shortfall calculated';
+
+        } else {
+
+            resultAmount.textContent = '£0';
+
+        }
+
+
+        var percentage;
+
+        if (purchase > 0) {
+
+            percentage =
+                Math.min(
+                    Math.max((settlement / purchase) * 100, 0),
+                    100
+                );
+
+        } else {
+
+            percentage = 0;
+
+        }
+
+
+        settlementBar.style.width =
+            percentage + '%';
+
+
+        purchaseValue.textContent =
+            purchase > 0
+                ? formatCurrency(purchase, 0)
+                : '£0';
+
+
+        shortfallLabel.textContent =
+            shortfall > 0
+                ? 'Shortfall: ' + formatCurrency(shortfall, 0)
+                : 'No shortfall';
+
+    }
+
+
+    purchaseInput.addEventListener(
+        'input',
+        calculateMain
+    );
+
+    settlementInput.addEventListener(
+        'input',
+        calculateMain
+    );
+
+
+    /* Comparison calculator */
+
+    function calculateComparison() {
+
+        for (var column = 1; column <= 2; column++) {
+
+            var total = 0;
+
+            var inputs =
+                document.querySelectorAll(
+                    '#compare-body input[data-col="' +
+                    column +
+                    '"]'
+                );
+
+
+            inputs.forEach(function (input) {
+
+                if (input.dataset.row !== 'purchase') {
+
+                    total += parseNumber(input.value);
+
+                }
+
+            });
+
+
+            document.getElementById(
+                'total-v' + column
+            ).textContent =
+                formatCurrency(total, 2);
+
+        }
+
+    }
+
+
+    document
+        .querySelectorAll('#compare-body input')
+        .forEach(function (input) {
+
+            input.addEventListener(
+                'input',
+                calculateComparison
+            );
+
+        });
+
+
+    /* Reset */
+
+    document
+        .getElementById('reset-btn')
+        .addEventListener('click', function () {
+
+            document
+                .querySelectorAll('input[type="text"]')
+                .forEach(function (input) {
+
+                    input.value = '';
+
+                });
+
+
+            calculateMain();
+            calculateComparison();
+
+        });
+
+
+    /* Initial state */
+
+    calculateMain();
+    calculateComparison();
+
+})();
+</script>
+
+</body>
+</html>
