@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
 *,
 *::before,
 *::after {
@@ -24,7 +25,8 @@
     --slate300: #cbd5e1;
     --slate500: #64748b;
     --slate700: #334155;
-    --danger: #f87171;
+    --green: #22c55e;
+    --green-light: #4ade80;
 }
 
 html {
@@ -35,7 +37,7 @@ html {
 
 body {
     margin: 0;
-    padding: 18px;
+    padding: 16px;
     background: var(--navy);
     color: #fff;
     font-family: 'DM Sans', sans-serif;
@@ -49,66 +51,122 @@ body {
     margin: 0 auto;
 }
 
-/* -----------------------------
+/* =========================================
    INTRO
------------------------------ */
+========================================= */
 
 .intro {
-    margin-bottom: 18px;
+    margin-bottom: 15px;
+
     opacity: 0;
     transform: translateY(12px);
-    animation: introIn .65s ease forwards;
+
+    animation: fadeUp .65s ease forwards;
 }
 
 .intro h1 {
-    margin: 0 0 6px;
+    margin: 0 0 5px;
+
     font-size: clamp(21px, 4vw, 27px);
     line-height: 1.15;
     font-weight: 700;
-    letter-spacing: -0.3px;
+
+    letter-spacing: -0.35px;
 }
 
 .intro p {
     margin: 0;
+
+    max-width: 650px;
+
     color: var(--muted);
-    font-size: 13px;
+
+    font-size: 12.5px;
     line-height: 1.45;
-    max-width: 620px;
 }
 
-/* -----------------------------
-   CALCULATOR CARD
------------------------------ */
+/* =========================================
+   SECTION LABELS
+========================================= */
+
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    color: var(--accent-light);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: .7px;
+}
+
+.section-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 19px;
+    height: 19px;
+
+    border-radius: 50%;
+
+    background: rgba(0,180,216,.14);
+
+    color: var(--accent-light);
+
+    font-size: 9px;
+}
+
+/* =========================================
+   INPUT SECTION
+========================================= */
+
+.input-section {
+    opacity: 0;
+    transform: translateY(14px);
+
+    animation: fadeUp .65s ease .1s forwards;
+}
 
 .card {
     background: var(--navy-light);
-    border-radius: 15px;
-    padding: 18px;
-    margin-bottom: 14px;
-    border: 1px solid rgba(255,255,255,0.035);
 
-    opacity: 0;
-    transform: translateY(14px);
-    animation: cardIn .65s ease .12s forwards;
+    border-radius: 14px;
+
+    padding: 16px;
+
+    border: 1px solid rgba(255,255,255,.035);
 }
 
 .inputs {
     display: grid;
+
     grid-template-columns: 1fr;
-    gap: 14px;
+
+    gap: 12px;
 }
 
 @media (min-width: 520px) {
+
     .inputs {
         grid-template-columns: 1fr 1fr;
     }
+
 }
 
 .field label {
     display: block;
-    margin-bottom: 6px;
+
+    margin-bottom: 5px;
+
     color: var(--slate300);
-    font-size: 12px;
+
+    font-size: 11.5px;
     font-weight: 600;
 }
 
@@ -118,36 +176,44 @@ body {
 
 .currency {
     position: absolute;
-    left: 12px;
+
+    left: 11px;
     top: 50%;
+
     transform: translateY(-50%);
+
     color: var(--muted);
-    font-size: 16px;
+
+    font-size: 15px;
     font-weight: 600;
+
     pointer-events: none;
 }
 
 input {
     width: 100%;
-    height: 48px;
-    padding: 0 12px 0 30px;
+    height: 44px;
 
-    border-radius: 10px;
+    padding: 0 11px 0 29px;
+
+    border-radius: 9px;
+
     border: 1.5px solid var(--slate700);
 
     background: var(--navy);
+
     color: #fff;
 
     font-family: inherit;
-    font-size: 17px;
+
+    font-size: 16px;
     font-weight: 600;
 
     outline: none;
 
     transition:
         border-color .2s ease,
-        box-shadow .2s ease,
-        transform .15s ease;
+        box-shadow .2s ease;
 }
 
 input::placeholder {
@@ -156,272 +222,414 @@ input::placeholder {
 
 input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(0,180,216,.10);
+
+    box-shadow:
+        0 0 0 3px rgba(0,180,216,.10);
 }
 
-/* -----------------------------
-   BAR SECTION
------------------------------ */
+/* =========================================
+   VALUE BAR
+========================================= */
 
-.visual {
+.value-section {
+
+    margin-top: 12px;
+
     opacity: 0;
-    transform: translateY(14px);
-    animation: cardIn .65s ease .22s forwards;
+    transform: translateY(12px);
+
+    animation: fadeUp .65s ease .18s forwards;
 }
 
-.visual-title {
+.value-heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 7px;
+
+    margin-bottom: 6px;
 }
 
-.visual-title span {
+.value-heading span {
     color: var(--muted);
-    font-size: 11px;
-    font-weight: 500;
+
+    font-size: 10.5px;
+}
+
+#future-value {
+    color: #fff;
+
+    font-weight: 600;
 }
 
 .bar {
     position: relative;
-    height: 42px;
+
     width: 100%;
+    height: 40px;
+
     overflow: hidden;
-    border-radius: 10px;
+
+    border-radius: 9px;
+
     background: #101824;
 }
 
-/* Full vehicle value */
-.bar-full {
+/*
+Motor insurer portion
+*/
+
+.bar-market {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    background: #475569;
+
+    left: 0;
+    top: 0;
+
+    height: 100%;
+    width: 66.66%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #475569,
+            #64748b
+        );
+
+    transition:
+        width .75s cubic-bezier(.22,1,.36,1);
 }
 
-/* APEX / shortfall portion */
+/*
+APEX portion
+*/
+
 .bar-apex {
     position: absolute;
-    top: 0;
+
     right: 0;
+    top: 0;
+
     height: 100%;
-    width: 0%;
+    width: 33.33%;
 
-    background: linear-gradient(
-        90deg,
-        rgba(0,180,216,.72),
-        rgba(56,203,231,.95)
-    );
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,180,216,.75),
+            rgba(56,203,231,.98)
+        );
 
-    transition: width .8s cubic-bezier(.22,1,.36,1);
+    transition:
+        width .75s cubic-bezier(.22,1,.36,1);
 }
 
-/* subtle shine */
 .bar-apex::after {
+
     content: "";
+
     position: absolute;
+
     top: 0;
-    left: -50%;
-    width: 35%;
+    left: -45%;
+
+    width: 30%;
     height: 100%;
 
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.18),
-        transparent
-    );
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.22),
+            transparent
+        );
 
-    animation: shine 3s ease-in-out infinite;
+    animation:
+        shine 3.5s ease-in-out infinite;
 }
 
 .bar-labels {
+
     display: flex;
     justify-content: space-between;
-    margin-top: 7px;
+
+    margin-top: 6px;
 }
 
 .bar-labels span {
+
     color: var(--muted);
-    font-size: 11px;
+
+    font-size: 10px;
 }
 
 .bar-labels .apex-label {
+
     color: var(--accent-light);
+
     font-weight: 600;
 }
 
-/* -----------------------------
-   RESULT
------------------------------ */
+/* =========================================
+   FINANCIAL SHORTFALL
+========================================= */
 
-.result {
-    margin-top: 14px;
-    padding: 17px;
+.shortfall-section {
+
+    margin-top: 15px;
+
+    opacity: 0;
+    transform: translateY(14px);
+
+    animation: fadeUp .65s ease .28s forwards;
+}
+
+.shortfall-card {
+
+    padding: 16px;
 
     text-align: center;
 
-    border-radius: 15px;
-    border: 1px solid rgba(0,180,216,.22);
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,.06);
+
+    background: var(--navy-light);
+
+    transition:
+        border-color .5s ease,
+        box-shadow .5s ease;
+}
+
+.shortfall-card.active {
+
+    border-color:
+        rgba(0,180,216,.35);
+
+    box-shadow:
+        0 8px 28px rgba(0,180,216,.07);
+}
+
+.shortfall-title {
+
+    margin: 0 0 1px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+.shortfall-amount {
+
+    margin: 0;
+
+    color: var(--accent-light);
+
+    font-size: clamp(30px, 7vw, 40px);
+
+    line-height: 1.05;
+
+    font-weight: 700;
+
+    letter-spacing: -1px;
+}
+
+.shortfall-description {
+
+    max-width: 620px;
+
+    margin: 7px auto 0;
+
+    color: var(--slate300);
+
+    font-size: 10.5px;
+
+    line-height: 1.45;
+}
+
+/* =========================================
+   APEX EXPLANATION
+========================================= */
+
+.apex-section {
+
+    margin-top: 12px;
+
+    opacity: 0;
+    transform: translateY(14px);
+
+    animation: fadeUp .65s ease .38s forwards;
+}
+
+.apex-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 15px 16px;
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(34,197,94,.20);
 
     background:
         linear-gradient(
             135deg,
-            rgba(0,180,216,.07),
-            rgba(0,180,216,.015)
+            rgba(34,197,94,.08),
+            rgba(34,197,94,.025)
         );
-
-    opacity: 0;
-    transform: scale(.97) translateY(8px);
-
-    animation: resultIn .7s ease .32s forwards;
-
-    transition:
-        box-shadow .5s ease,
-        border-color .5s ease;
 }
 
-.result.active {
-    border-color: rgba(0,180,216,.45);
-    box-shadow: 0 8px 30px rgba(0,180,216,.08);
+.apex-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 3px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--green-light),
+            var(--green)
+        );
 }
 
-.result-title {
-    margin: 0 0 3px;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 500;
-}
+.apex-title {
 
-.result-number {
-    margin: 0;
+    margin: 0 0 5px;
 
-    color: var(--accent-light);
+    color: var(--green-light);
 
-    font-size: clamp(29px, 7vw, 40px);
-    line-height: 1.05;
+    font-size: 13px;
+
     font-weight: 700;
-    letter-spacing: -1px;
 }
 
-.result-copy {
-    max-width: 520px;
-    margin: 7px auto 0;
+.apex-copy {
 
-    color: var(--slate500);
-    font-size: 10.5px;
-    line-height: 1.4;
-}
-
-/* -----------------------------
-   EXPLANATION
------------------------------ */
-
-.explanation {
-    margin-top: 12px;
-
-    opacity: 0;
-    transform: translateY(10px);
-    animation: introIn .6s ease .4s forwards;
-}
-
-.explanation p {
     margin: 0;
 
     color: var(--slate300);
-    font-size: 11px;
-    line-height: 1.45;
+
+    font-size: 10.5px;
+
+    line-height: 1.5;
 }
 
-.explanation strong {
+.apex-copy strong {
+
     color: #fff;
+
+    font-weight: 600;
 }
 
-/* -----------------------------
-   RESET
------------------------------ */
+/* =========================================
+   FOOTER
+========================================= */
 
 .footer {
+
     display: flex;
-    justify-content: flex-end;
-    margin-top: 8px;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 7px;
 
     opacity: 0;
-    animation: introIn .5s ease .48s forwards;
+
+    animation:
+        fadeUp .5s ease .48s forwards;
+}
+
+.disclaimer {
+
+    margin: 0;
+
+    color: var(--slate500);
+
+    font-size: 9px;
 }
 
 #reset {
+
     border: 0;
+
     background: transparent;
 
     color: var(--slate500);
 
     font-family: inherit;
-    font-size: 11px;
+
+    font-size: 10px;
 
     cursor: pointer;
 
-    padding: 3px 0;
+    padding: 2px 0;
 
-    transition: color .2s ease;
+    transition:
+        color .2s ease;
 }
 
 #reset:hover {
     color: #fff;
 }
 
-/* -----------------------------
+/* =========================================
    ANIMATIONS
------------------------------ */
+========================================= */
 
-@keyframes introIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+@keyframes fadeUp {
 
-@keyframes cardIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+    from {
 
-@keyframes resultIn {
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
+        opacity: 0;
+
+        transform:
+            translateY(12px);
     }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+
 }
 
 @keyframes shine {
+
     0% {
-        left: -50%;
+        left: -45%;
     }
 
-    50% {
-        left: 110%;
+    45% {
+        left: 115%;
     }
 
     100% {
-        left: 110%;
+        left: 115%;
     }
+
 }
 
-/* Mobile optimisation */
+/* =========================================
+   MOBILE
+========================================= */
+
 @media (max-width: 480px) {
 
     body {
-        padding: 14px;
-    }
-
-    .card {
-        padding: 15px;
-    }
-
-    .intro {
-        margin-bottom: 14px;
+        padding: 13px;
     }
 
     .intro h1 {
@@ -429,25 +637,35 @@ input:focus {
     }
 
     .intro p {
-        font-size: 12px;
+        font-size: 11.5px;
     }
 
-    input {
-        height: 45px;
+    .card {
+        padding: 14px;
     }
 
-    .result {
-        padding: 15px;
+    .shortfall-card {
+        padding: 14px;
     }
+
+    .apex-card {
+        padding: 14px 15px;
+    }
+
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div class="calculator">
 
-    <!-- INTRO -->
+
+    <!-- =====================================
+         INTRO
+    ====================================== -->
 
     <section class="intro">
 
@@ -456,60 +674,87 @@ input:focus {
         </h1>
 
         <p>
-            Enter what you paid for your car and what you think it could be worth in 3 years to see how a potential shortfall could be protected.
+            Enter what you paid for your car and what you think it could be worth in 3 years to see how a potential financial shortfall could arise.
         </p>
 
     </section>
 
 
-    <!-- INPUTS -->
+    <!-- =====================================
+         SECTION 1
+    ====================================== -->
 
-    <section class="card">
+    <section class="input-section">
 
-        <div class="inputs">
+        <div class="section-label">
 
-            <div class="field">
+            <span class="section-number">
+                1
+            </span>
 
-                <label for="invoice">
-                    What did you pay for your car?
-                </label>
+            Estimate your vehicle's value
 
-                <div class="input-wrap">
+        </div>
 
-                    <span class="currency">£</span>
 
-                    <input
-                        id="invoice"
-                        type="text"
-                        inputmode="decimal"
-                        placeholder="30,000"
-                        autocomplete="off"
-                    >
+        <div class="card">
+
+            <div class="inputs">
+
+
+                <div class="field">
+
+                    <label for="invoice">
+
+                        Original invoice price
+
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <span class="currency">
+                            £
+                        </span>
+
+                        <input
+                            id="invoice"
+                            type="text"
+                            inputmode="decimal"
+                            placeholder="30,000"
+                            autocomplete="off"
+                        >
+
+                    </div>
 
                 </div>
 
-            </div>
 
+                <div class="field">
 
-            <div class="field">
+                    <label for="future">
 
-                <label for="future">
-                    What do you think it could be worth in 3 years?
-                </label>
+                        Estimated value in 3 years
 
-                <div class="input-wrap">
+                    </label>
 
-                    <span class="currency">£</span>
+                    <div class="input-wrap">
 
-                    <input
-                        id="future"
-                        type="text"
-                        inputmode="decimal"
-                        placeholder="20,000"
-                        autocomplete="off"
-                    >
+                        <span class="currency">
+                            £
+                        </span>
+
+                        <input
+                            id="future"
+                            type="text"
+                            inputmode="decimal"
+                            placeholder="20,000"
+                            autocomplete="off"
+                        >
+
+                    </div>
 
                 </div>
+
 
             </div>
 
@@ -518,14 +763,17 @@ input:focus {
     </section>
 
 
-    <!-- VISUAL BAR -->
+    <!-- =====================================
+         VALUE BAR
+    ====================================== -->
 
-    <section class="visual">
+    <section class="value-section">
 
-        <div class="visual-title">
+
+        <div class="value-heading">
 
             <span>
-                Estimated vehicle value
+                Estimated vehicle value after 3 years
             </span>
 
             <span id="future-value">
@@ -537,16 +785,19 @@ input:focus {
 
         <div class="bar">
 
-            <!-- Motor insurance value -->
+            <!-- Motor Insurance -->
+
             <div
-                class="bar-full"
-                id="bar-full"
+                id="bar-market"
+                class="bar-market"
             ></div>
 
-            <!-- Potential APEX protection -->
+
+            <!-- Potential APEX -->
+
             <div
-                class="bar-apex"
                 id="bar-apex"
+                class="bar-apex"
             ></div>
 
         </div>
@@ -555,7 +806,7 @@ input:focus {
         <div class="bar-labels">
 
             <span>
-                Motor Insurance
+                Motor Insurer's Market Value
             </span>
 
             <span class="apex-label">
@@ -564,80 +815,156 @@ input:focus {
 
         </div>
 
+
     </section>
 
 
-    <!-- RESULT -->
+    <!-- =====================================
+         SECTION 2
+    ====================================== -->
 
-    <section
-        class="result"
-        id="result"
-    >
+    <section class="shortfall-section">
 
-        <p class="result-title">
-            Potential shortfall
-        </p>
 
-        <p
-            class="result-number"
-            id="shortfall"
+        <div class="section-label">
+
+            <span class="section-number">
+                2
+            </span>
+
+            Financial Shortfall
+
+        </div>
+
+
+        <div
+            id="shortfall-card"
+            class="shortfall-card"
         >
-            £10,000
-        </p>
 
-        <p class="result-copy">
-            If your car is written off, your motor insurer may only pay its market value at the time of the claim. APEX can help protect against a potential difference, subject to the terms and conditions of the policy.
-        </p>
+            <p class="shortfall-title">
+                Potential Financial Shortfall
+            </p>
+
+
+            <p
+                id="shortfall"
+                class="shortfall-amount"
+            >
+                £10,000
+            </p>
+
+
+            <p class="shortfall-description">
+
+                If your vehicle was declared a
+                <strong>Total Loss</strong>
+                by your Motor Insurer, they would value the vehicle at its
+                <strong>Market Value at the time of loss</strong>.
+                This is likely to be less than what you paid originally.
+
+            </p>
+
+        </div>
+
 
     </section>
 
 
-    <!-- EXPLANATION -->
+    <!-- =====================================
+         SECTION 3
+    ====================================== -->
 
-    <section class="explanation">
+    <section class="apex-section">
 
-        <p>
-            <strong>How it works:</strong>
-            the grey section represents the estimated value your motor insurer could pay, while the blue section represents the potential shortfall that APEX could help protect.
-        </p>
+
+        <div class="section-label">
+
+            <span class="section-number">
+                3
+            </span>
+
+            How APEX could help
+
+        </div>
+
+
+        <div class="apex-card">
+
+            <p class="apex-title">
+
+                APEX is designed to bridge the gap
+
+            </p>
+
+
+            <p class="apex-copy">
+
+                APEX is designed to cover the difference between your Motor Insurer's valuation and what you originally paid for the vehicle, helping to protect against a potential financial shortfall following a Total Loss, subject to the terms and conditions of the policy.
+
+            </p>
+
+        </div>
+
 
     </section>
 
 
-    <!-- RESET -->
+    <!-- =====================================
+         FOOTER
+    ====================================== -->
 
-    <div class="footer">
+    <footer class="footer">
+
+        <p class="disclaimer">
+            Illustrative purposes only. Not a quote.
+        </p>
+
 
         <button id="reset">
-            ↺ Reset calculator
+            ↺ Reset
         </button>
 
-    </div>
+    </footer>
+
 
 </div>
 
 
 <script>
 
-/* --------------------------------
+/* =========================================
    ELEMENTS
--------------------------------- */
+========================================= */
 
-const invoiceInput = document.getElementById('invoice');
-const futureInput = document.getElementById('future');
+const invoiceInput =
+    document.getElementById('invoice');
 
-const shortfallEl = document.getElementById('shortfall');
-const futureValueEl = document.getElementById('future-value');
+const futureInput =
+    document.getElementById('future');
 
-const barApex = document.getElementById('bar-apex');
-const result = document.getElementById('result');
+const futureValue =
+    document.getElementById('future-value');
 
-const resetButton = document.getElementById('reset');
+const barMarket =
+    document.getElementById('bar-market');
+
+const barApex =
+    document.getElementById('bar-apex');
+
+const shortfall =
+    document.getElementById('shortfall');
+
+const shortfallCard =
+    document.getElementById('shortfall-card');
+
+const reset =
+    document.getElementById('reset');
 
 
-/* --------------------------------
-   NUMBER PARSING
--------------------------------- */
+/* =========================================
+   PARSE NUMBER
+========================================= */
 
 function parseNumber(value) {
 
@@ -646,90 +973,96 @@ function parseNumber(value) {
     }
 
     return parseFloat(
-        value.replace(/[^0-9.]/g, '')
+        value
+            .replace(/[^0-9.]/g, '')
     ) || 0;
 
 }
 
 
-/* --------------------------------
-   CURRENCY FORMAT
--------------------------------- */
+/* =========================================
+   FORMAT CURRENCY
+========================================= */
 
-function formatCurrency(value) {
+function currency(value) {
 
-    return '£' + Math.round(value).toLocaleString('en-GB');
-
-}
-
-
-/* --------------------------------
-   INPUT FORMATTING
--------------------------------- */
-
-function formatInput(input) {
-
-    const value = parseNumber(input.value);
-
-    if (!value) {
-        return;
-    }
-
-    input.value = value.toLocaleString('en-GB');
+    return '£' +
+        Math.round(value)
+            .toLocaleString('en-GB');
 
 }
 
 
-/* --------------------------------
+/* =========================================
    ANIMATED NUMBER
--------------------------------- */
+========================================= */
 
-let animationFrame;
+let animationFrame = null;
 
 function animateNumber(element, target) {
 
-    cancelAnimationFrame(animationFrame);
+    if (animationFrame) {
 
-    const currentText =
-        element.textContent.replace(/[^0-9.]/g, '');
+        cancelAnimationFrame(
+            animationFrame
+        );
 
-    const start =
-        parseFloat(currentText) || 0;
+    }
+
+
+    const current =
+        parseFloat(
+            element.textContent
+                .replace(/[^0-9.]/g, '')
+        ) || 0;
+
+
+    const difference =
+        target - current;
+
 
     const duration = 550;
 
-    const startTime = performance.now();
+    const start =
+        performance.now();
 
 
     function update(time) {
 
         const progress =
             Math.min(
-                (time - startTime) / duration,
+                (time - start) / duration,
                 1
             );
 
 
         /*
-         * Smooth easing
+         * Ease-out animation
          */
 
         const eased =
-            1 - Math.pow(1 - progress, 3);
+            1 -
+            Math.pow(
+                1 - progress,
+                3
+            );
 
 
         const value =
-            start + (target - start) * eased;
+            current +
+            difference * eased;
 
 
         element.textContent =
-            formatCurrency(value);
+            currency(value);
 
 
         if (progress < 1) {
 
             animationFrame =
-                requestAnimationFrame(update);
+                requestAnimationFrame(
+                    update
+                );
 
         }
 
@@ -737,69 +1070,74 @@ function animateNumber(element, target) {
 
 
     animationFrame =
-        requestAnimationFrame(update);
+        requestAnimationFrame(
+            update
+        );
 
 }
 
 
-/* --------------------------------
-   MAIN CALCULATOR
--------------------------------- */
+/* =========================================
+   CALCULATOR
+========================================= */
 
 function calculate() {
 
-    const invoice =
-        parseNumber(invoiceInput.value);
+    const purchase =
+        parseNumber(
+            invoiceInput.value
+        );
 
-    const future =
-        parseNumber(futureInput.value);
 
-
-    /*
-     * Potential shortfall
-     */
-
-    const shortfall =
-        Math.max(0, invoice - future);
+    const estimatedValue =
+        parseNumber(
+            futureInput.value
+        );
 
 
     /*
-     * Update future value label
+     * Financial shortfall
      */
 
-    futureValueEl.textContent =
-        future > 0
-            ? formatCurrency(future)
+    const gap =
+        Math.max(
+            0,
+            purchase - estimatedValue
+        );
+
+
+    /*
+     * Display estimated value
+     */
+
+    futureValue.textContent =
+        estimatedValue > 0
+            ? currency(estimatedValue)
             : '£0';
 
 
     /*
-     * Calculate APEX section width.
+     * Calculate proportions
      *
      * Example:
      *
-     * Invoice £30,000
-     * Future value £20,000
+     * Purchase £30,000
+     * Estimated value £20,000
      *
-     * Shortfall = £10,000
-     *
-     * APEX section = 33.3%
+     * Market Value = 66.7%
+     * APEX gap = 33.3%
      */
 
     let apexPercentage = 0;
 
 
-    if (invoice > 0) {
+    if (purchase > 0) {
 
         apexPercentage =
-            (shortfall / invoice) * 100;
+            (gap / purchase) * 100;
 
     }
 
-
-    /*
-     * Keep bar within 0-100%
-     */
 
     apexPercentage =
         Math.max(
@@ -811,44 +1149,59 @@ function calculate() {
         );
 
 
+    const marketPercentage =
+        100 - apexPercentage;
+
+
     /*
-     * Animate the bar
+     * Animate bar
      */
+
+    barMarket.style.width =
+        marketPercentage + '%';
+
 
     barApex.style.width =
         apexPercentage + '%';
 
 
     /*
-     * Animate result
+     * Animate financial shortfall
      */
 
     animateNumber(
-        shortfallEl,
-        shortfall
+        shortfall,
+        gap
     );
 
 
     /*
-     * Highlight result when user has entered figures
+     * Highlight result
      */
 
-    if (invoice > 0 && future > 0) {
+    if (
+        purchase > 0 &&
+        estimatedValue > 0
+    ) {
 
-        result.classList.add('active');
+        shortfallCard
+            .classList
+            .add('active');
 
     } else {
 
-        result.classList.remove('active');
+        shortfallCard
+            .classList
+            .remove('active');
 
     }
 
 }
 
 
-/* --------------------------------
+/* =========================================
    LIVE INPUT
--------------------------------- */
+========================================= */
 
 invoiceInput.addEventListener(
     'input',
@@ -861,48 +1214,90 @@ futureInput.addEventListener(
 );
 
 
-/* --------------------------------
-   FORMAT WHEN USER LEAVES FIELD
--------------------------------- */
+/* =========================================
+   FORMAT INPUT ON BLUR
+========================================= */
 
 invoiceInput.addEventListener(
     'blur',
     function() {
-        formatInput(invoiceInput);
+
+        const value =
+            parseNumber(
+                invoiceInput.value
+            );
+
+
+        if (value) {
+
+            invoiceInput.value =
+                value.toLocaleString(
+                    'en-GB'
+                );
+
+        }
+
+
         calculate();
+
     }
 );
+
 
 futureInput.addEventListener(
     'blur',
     function() {
-        formatInput(futureInput);
+
+        const value =
+            parseNumber(
+                futureInput.value
+            );
+
+
+        if (value) {
+
+            futureInput.value =
+                value.toLocaleString(
+                    'en-GB'
+                );
+
+        }
+
+
         calculate();
+
     }
 );
 
 
-/* --------------------------------
+/* =========================================
    RESET
--------------------------------- */
+========================================= */
 
-resetButton.addEventListener(
+reset.addEventListener(
     'click',
     function() {
 
         invoiceInput.value = '';
         futureInput.value = '';
 
-        barApex.style.width = '0%';
+        barMarket.style.width =
+            '100%';
 
-        futureValueEl.textContent = '£0';
+        barApex.style.width =
+            '0%';
+
+        futureValue.textContent =
+            '£0';
 
         animateNumber(
-            shortfallEl,
+            shortfall,
             0
         );
 
-        result.classList.remove('active');
+        shortfallCard
+            .classList
+            .remove('active');
 
         invoiceInput.focus();
 
@@ -910,31 +1305,30 @@ resetButton.addEventListener(
 );
 
 
-/* --------------------------------
-   INITIAL DEMO ANIMATION
--------------------------------- */
+/* =========================================
+   INITIAL DEMONSTRATION
+========================================= */
 
 /*
- * Start with example figures so the
- * calculator looks alive when the
- * customer first sees it.
+ * The example figures appear shortly
+ * after loading so the customer immediately
+ * understands how the calculator works.
  */
 
-setTimeout(function() {
+setTimeout(
+    function() {
 
-    invoiceInput.value = '30,000';
-    futureInput.value = '20,000';
+        invoiceInput.value =
+            '30,000';
 
-    calculate();
+        futureInput.value =
+            '20,000';
 
-}, 700);
+        calculate();
 
-
-/*
- * Then leave the example figures
- * available for the customer to
- * overwrite.
- */
+    },
+    700
+);
 
 </script>
 
