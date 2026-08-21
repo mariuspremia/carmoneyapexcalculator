@@ -1,883 +1,898 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarMoney APEX Calculator</title>
 
-<title>CarMoney APEX Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-:root {
-    --navy: #1a2332;
-    --navy-light: #243044;
-    --accent: #00b4d8;
-    --muted: #94a3b8;
-    --slate300: #cbd5e1;
-    --slate500: #64748b;
-    --slate700: #334155;
-}
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
-}
-
-body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--navy);
-    color: #ffffff;
-    line-height: 1.5;
-    overflow-x: hidden;
-    padding: 16px;
-}
-
-.container {
-    width: 100%;
-    max-width: 720px;
-    margin: 0 auto;
-}
-
-.card {
-    background: var(--navy-light);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 32px;
-}
-
-.logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    background: var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 18px;
-    flex-shrink: 0;
-}
-
-h1 {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0;
-}
-
-h2 {
-    font-size: 24px;
-    font-weight: 700;
-    margin: 0 0 8px;
-}
-
-h3 {
-    font-size: 19px;
-    font-weight: 600;
-    color: #ffffff;
-    margin: 0 0 16px;
-}
-
-.sub {
-    color: var(--muted);
-    font-size: 14px;
-    margin: 0 0 32px;
-}
-
-.grid2 {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-}
-
-label {
-    display: block;
-    color: var(--slate300);
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-
-.input-wrap {
-    position: relative;
-}
-
-.input-wrap span {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--muted);
-    font-weight: 500;
-    pointer-events: none;
-}
-
-input[type="text"] {
-    background: var(--navy);
-    border: 1.5px solid var(--slate700);
-    color: #ffffff;
-    width: 100%;
-    padding: 14px 16px 14px 32px;
-    border-radius: 12px;
-    font-size: 18px;
-    font-family: inherit;
-    font-weight: 500;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-input[type="text"]:focus {
-    border-color: var(--accent);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.12);
-}
-
-input::placeholder {
-    color: #64748b;
-}
-
-/* Value bar */
-
-.bar-labels,
-.bar-values {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.small-label {
-    font-size: 12px;
-    color: var(--muted);
-}
-
-.bar-outer {
-    position: relative;
-    height: 48px;
-    background: var(--navy);
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.bar-full {
-    position: absolute;
-    inset: 0;
-    background: #475569;
-    border-radius: 12px;
-}
-
-.bar-settlement {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 66%;
-    background: rgba(0, 180, 216, 0.8);
-    border-radius: 12px;
-    transition: width 0.5s cubic-bezier(.4,0,.2,1);
-}
-
-.bar-values {
-    margin-top: 8px;
-}
-
-.shortfall-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: #f87171;
-    text-align: right;
-}
-
-/* Result */
-
-.result-card {
-    text-align: center;
-    border: 1px solid var(--slate700);
-    animation: pulse-glow 2s infinite;
-}
-
-.result-label {
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 500;
-    margin: 0 0 4px;
-}
-
-.result-amount {
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--accent);
-    margin: 8px 0;
-    word-break: break-word;
-}
-
-.result-disclaimer {
-    color: var(--slate500);
-    font-size: 12px;
-    max-width: 420px;
-    margin: 0 auto;
-}
-
-@keyframes pulse-glow {
-    0%, 100% {
-        box-shadow: 0 0 0 0 rgba(0,180,216,.15);
+  <style>
+    * {
+      box-sizing: border-box;
     }
-    50% {
-        box-shadow: 0 0 20px 4px rgba(0,180,216,.1);
+
+    :root {
+      --navy: #1a2332;
+      --navy-light: #243044;
+      --navy-dark: #111923;
+      --accent: #00b4d8;
+      --accent-hover: #0096b7;
+      --white: #ffffff;
+      --muted: #94a3b8;
+      --slate300: #cbd5e1;
+      --slate500: #64748b;
+      --slate700: #334155;
+      --shortfall: #f87171;
+      --success: #4ade80;
     }
-}
 
-/* Comparison table */
-
-.table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    min-width: 500px;
-}
-
-th {
-    text-align: center;
-    color: var(--muted);
-    font-weight: 500;
-    padding-bottom: 12px;
-}
-
-th:first-child {
-    text-align: left;
-}
-
-td {
-    padding: 12px 8px;
-    border-top: 1px solid var(--slate700);
-}
-
-td:first-child {
-    color: var(--slate300);
-    padding-right: 8px;
-}
-
-.tbl-input {
-    padding: 8px 12px !important;
-    font-size: 14px !important;
-    text-align: center;
-}
-
-.total-row {
-    background: rgba(26,35,50,.5);
-}
-
-.total-row td {
-    font-weight: 600;
-    color: var(--accent);
-    text-align: center;
-}
-
-.total-row td:first-child {
-    color: #ffffff;
-    text-align: left;
-}
-
-/* Footer */
-
-footer {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    margin-top: 8px;
-    padding-bottom: 8px;
-}
-
-#reset-btn {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 14px;
-    cursor: pointer;
-    font-family: inherit;
-    padding: 4px 0;
-}
-
-#reset-btn:hover {
-    color: #ffffff;
-}
-
-.footer-note {
-    color: var(--slate500);
-    font-size: 12px;
-    margin: 0;
-}
-
-/* Responsive */
-
-@media (min-width: 500px) {
-    .grid2 {
-        grid-template-columns: 1fr 1fr;
+    html {
+      margin: 0;
+      padding: 0;
+      background: var(--navy);
     }
-}
 
-@media (min-width: 768px) {
     body {
-        padding: 32px;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      margin: 0;
+      padding: 20px;
+      line-height: 1.5;
+      overflow-x: hidden;
     }
-}
 
-@media (max-width: 499px) {
+    .wrap {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 9px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 700;
+      font-size: 19px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    /* INTRO */
+
+    .intro {
+      margin-bottom: 28px;
+    }
+
+    .intro h1 {
+      font-size: 27px;
+      line-height: 1.2;
+      margin: 0 0 10px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .intro p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0;
+      max-width: 650px;
+    }
+
+    /* CARDS */
+
     .card {
-        padding: 18px;
-        border-radius: 14px;
+      background: var(--navy-light);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
     }
 
-    h2 {
-        font-size: 21px;
+    /* INPUTS */
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .input-group label {
+      display: block;
+      color: var(--slate300);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .helper {
+      display: block;
+      color: var(--slate500);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .currency {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 17px;
+      pointer-events: none;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: var(--navy-dark);
+      border: 1.5px solid var(--slate700);
+      border-radius: 12px;
+      color: var(--white);
+      padding: 14px 16px 14px 34px;
+      font-family: inherit;
+      font-size: 18px;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.12);
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--slate500);
+    }
+
+    /* VALUE BAR */
+
+    .visual-card {
+      background: var(--navy-light);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .visual-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 0 4px;
+    }
+
+    .visual-subtitle {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0 0 18px;
+    }
+
+    .bar-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 8px;
+    }
+
+    .bar-label {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .bar-label.right {
+      text-align: right;
+    }
+
+    .value-bar {
+      position: relative;
+      width: 100%;
+      height: 64px;
+      background: var(--navy-dark);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .insurance-bar {
+      width: 60%;
+      background: var(--accent);
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .shortfall-bar {
+      width: 40%;
+      background: var(--shortfall);
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .bar-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      color: white;
+    }
+
+    .insurance-bar .bar-content {
+      justify-content: flex-start;
+    }
+
+    .shortfall-bar .bar-content {
+      justify-content: flex-end;
+    }
+
+    .bar-amount {
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .bar-details {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 9px;
+    }
+
+    .bar-detail {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bar-detail strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    /* RESULT */
+
+    .result-card {
+      text-align: center;
+      border: 1px solid var(--slate700);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .result-label {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0 0 4px;
     }
 
     .result-amount {
-        font-size: 32px;
+      font-size: 40px;
+      line-height: 1.1;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 8px 0 10px;
+      transition: all 0.2s ease;
     }
 
-    footer {
-        flex-direction: column;
-        align-items: flex-start;
+    .result-description {
+      color: var(--slate500);
+      font-size: 12px;
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 auto;
     }
-}
-</style>
+
+    /* EXPLANATION */
+
+    .explanation {
+      background: rgba(0, 180, 216, 0.06);
+      border: 1px solid rgba(0, 180, 216, 0.16);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .explanation-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 0 5px;
+      color: var(--white);
+    }
+
+    .explanation-text {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* FOOTER */
+
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+      padding-bottom: 8px;
+    }
+
+    #reset-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 4px 0;
+      transition: color 0.2s;
+    }
+
+    #reset-btn:hover {
+      color: var(--white);
+    }
+
+    .footer-note {
+      color: var(--slate500);
+      font-size: 11px;
+      margin: 0;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 520px) {
+
+      body {
+        padding: 16px;
+      }
+
+      .header {
+        margin-bottom: 24px;
+      }
+
+      .intro h1 {
+        font-size: 23px;
+      }
+
+      .card,
+      .visual-card {
+        padding: 18px;
+      }
+
+      .value-bar {
+        height: 56px;
+      }
+
+      .bar-amount {
+        font-size: 12px;
+      }
+
+      .bar-content {
+        padding: 0 9px;
+      }
+
+      .result-amount {
+        font-size: 34px;
+      }
+    }
+
+    /* VERY SMALL SCREENS */
+
+    @media (max-width: 360px) {
+
+      .bar-amount {
+        font-size: 10px;
+      }
+
+      .bar-content {
+        padding: 0 6px;
+      }
+
+      .result-amount {
+        font-size: 30px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
+  <div class="wrap">
 
-    <!-- Header -->
+    <!-- HEADER -->
+
     <header class="header">
-        <div class="logo">C</div>
-        <h1>CarMoney</h1>
+      <div class="logo">C</div>
+      <p class="brand-name">CarMoney</p>
     </header>
 
-    <!-- Introduction -->
-    <section>
-        <h2>See how APEX can protect your vehicle's value</h2>
 
-        <p class="sub">
-            Calculate the potential shortfall between your vehicle's original price
-            and its market value following a total loss.
-        </p>
+    <!-- INTRO -->
+
+    <section class="intro">
+
+      <h1>See how APEX could help protect your vehicle's value</h1>
+
+      <p>
+        Think about what your car could be worth in three years.
+        Enter the figures below to see the potential difference between
+        its original invoice price and its estimated future value.
+      </p>
+
     </section>
 
-    <!-- Main Calculator -->
+
+    <!-- INPUTS -->
+
     <section class="card">
 
-        <div class="grid2">
+      <div class="input-grid">
 
-            <div>
-                <label for="purchase-price">
-                    Vehicle Purchase Price (£)
-                </label>
+        <!-- Invoice price -->
 
-                <div class="input-wrap">
-                    <span>£</span>
+        <div class="input-group">
 
-                    <input
-                        id="purchase-price"
-                        type="text"
-                        inputmode="decimal"
-                        placeholder="30,000"
-                        autocomplete="off"
-                    >
-                </div>
-            </div>
+          <label for="invoice-price">
+            What did you pay for your car?
+          </label>
 
-            <div>
-                <label for="insurance-settlement">
-                    Motor Insurance Settlement (£)
-                </label>
+          <div class="input-wrap">
 
-                <div class="input-wrap">
-                    <span>£</span>
+            <span class="currency">£</span>
 
-                    <input
-                        id="insurance-settlement"
-                        type="text"
-                        inputmode="decimal"
-                        placeholder="20,000"
-                        autocomplete="off"
-                    >
-                </div>
-            </div>
+            <input
+              id="invoice-price"
+              type="text"
+              inputmode="decimal"
+              placeholder="30,000"
+              autocomplete="off"
+            >
+
+          </div>
+
+          <span class="helper">
+            Enter the invoice price of your vehicle.
+          </span>
 
         </div>
+
+
+        <!-- Estimated future value -->
+
+        <div class="input-group">
+
+          <label for="future-value">
+            What do you think your car could be worth in 3 years?
+          </label>
+
+          <div class="input-wrap">
+
+            <span class="currency">£</span>
+
+            <input
+              id="future-value"
+              type="text"
+              inputmode="decimal"
+              placeholder="18,000"
+              autocomplete="off"
+            >
+
+          </div>
+
+          <span class="helper">
+            Enter your estimated value after three years.
+          </span>
+
+        </div>
+
+      </div>
 
     </section>
 
-    <!-- Visual Value Comparison -->
-    <section class="card">
 
-        <div class="bar-labels">
-            <span class="small-label">Purchase Price</span>
-            <span class="small-label">Insurance Settlement</span>
-        </div>
+    <!-- VALUE VISUAL -->
 
-        <div class="bar-outer">
+    <section class="visual-card">
 
-            <div class="bar-full"></div>
+      <p class="visual-title">
+        How the value could change
+      </p>
 
-            <div
-                id="bar-settlement"
-                class="bar-settlement"
-            ></div>
+      <p class="visual-subtitle">
+        An illustration of your estimated future vehicle value and potential shortfall.
+      </p>
 
-        </div>
 
-        <div class="bar-values">
+      <div class="bar-labels">
+
+        <span class="bar-label">
+          Motor Insurance
+        </span>
+
+        <span class="bar-label right">
+          Potential APEX Shortfall
+        </span>
+
+      </div>
+
+
+      <div class="value-bar">
+
+        <!-- Motor Insurance -->
+
+        <div
+          id="insurance-bar"
+          class="insurance-bar"
+        >
+
+          <div class="bar-content">
 
             <span
-                id="bar-purchase-val"
-                class="small-label"
+              id="insurance-bar-amount"
+              class="bar-amount"
             >
-                £30,000
+              £18,000
             </span>
 
-            <span
-                id="bar-shortfall-label"
-                class="shortfall-label"
-            >
-                Shortfall: £10,000
-            </span>
+          </div>
 
         </div>
+
+
+        <!-- Potential APEX -->
+
+        <div
+          id="shortfall-bar"
+          class="shortfall-bar"
+        >
+
+          <div class="bar-content">
+
+            <span
+              id="shortfall-bar-amount"
+              class="bar-amount"
+            >
+              £12,000
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="bar-details">
+
+        <span class="bar-detail">
+          Estimated future value:
+          <strong id="future-value-display">£18,000</strong>
+        </span>
+
+        <span class="bar-detail">
+          Potential difference:
+          <strong id="shortfall-display">£12,000</strong>
+        </span>
+
+      </div>
 
     </section>
 
-    <!-- Result -->
+
+    <!-- RESULT -->
+
     <section class="card result-card">
 
-        <p class="result-label">
-            Potential APEX Shortfall
+      <p class="result-label">
+        Potential APEX protection
+      </p>
+
+      <p
+        id="result-amount"
+        class="result-amount"
+      >
+        £12,000
+      </p>
+
+      <p class="result-description">
+        Based on the figures you've entered, this is the potential
+        difference between your vehicle's original invoice price and
+        its estimated value in three years.
+      </p>
+
+
+      <div class="explanation">
+
+        <p class="explanation-title">
+          How does this work?
         </p>
 
-        <p
-            id="result-amount"
-            class="result-amount"
-        >
-            £10,000
+        <p class="explanation-text">
+          Vehicles can lose value over time. If your vehicle is written
+          off, your motor insurer would typically assess its market value
+          at the time of the claim. APEX is designed to help protect
+          against certain financial shortfalls, subject to the terms,
+          conditions and eligibility of the policy.
         </p>
 
-        <p class="result-disclaimer">
-            This represents the potential difference between your vehicle's
-            original purchase price and the motor insurer's settlement.
-            Illustrative calculation only.
-        </p>
+      </div>
 
     </section>
 
-    <!-- Comparison -->
-    <section>
 
-        <h3>Compare your cover options</h3>
+    <!-- FOOTER -->
 
-        <div class="card table-wrapper">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Vehicle 1</th>
-                        <th>Vehicle 2</th>
-                    </tr>
-                </thead>
-
-                <tbody id="compare-body">
-
-                    <tr>
-                        <td>Purchase Price</td>
-
-                        <td>
-                            <input
-                                data-row="purchase"
-                                data-col="1"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="30,000"
-                                class="tbl-input"
-                                autocomplete="off"
-                            >
-                        </td>
-
-                        <td>
-                            <input
-                                data-row="purchase"
-                                data-col="2"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="25,000"
-                                class="tbl-input"
-                                autocomplete="off"
-                            >
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Year 1 Premium</td>
-
-                        <td>
-                            <input
-                                data-row="y1"
-                                data-col="1"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="250.00"
-                                class="tbl-input"
-                                autocomplete="off"
-                            >
-                        </td>
-
-                        <td>
-                            <input
-                                data-row="y1"
-                                data-col="2"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="200.00"
-                                class="tbl-input"
-                                autocomplete="off"
-                            >
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Year 2 Premium</td>
-
-                        <td>
-                            <input
-                                data-row="y2"
-                                data-col="1"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="250.00"
-                                class="tbl-input"
-                                autocomplete="off"
-                            >
-                        </td>
-
-                        <td>
-                            <input
-                                data-row="y2"
-                                data-col="2"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="200.00"
-                                class="tbl-input"
-                                autocomplete="off"
-                            >
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Year 3 Premium</td>
-
-                        <td>
-                            <input
-                                data-row="y3"
-                                data-col="1"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="250.00"
-                                class="tbl-input"
-                                autocomplete="off"
-                            >
-                        </td>
-
-                        <td>
-                            <input
-                                data-row="y3"
-                                data-col="2"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="200.00"
-                                class="tbl-input"
-                                autocomplete="off"
-                            >
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Year 4 Premium</td>
-
-                        <td>
-                            <input
-                                data-row="y4"
-                                data-col="1"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="250.00"
-                                class="tbl-input"
-                                autocomplete="off"
-                            >
-                        </td>
-
-                        <td>
-                            <input
-                                data-row="y4"
-                                data-col="2"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="200.00"
-                                class="tbl-input"
-                                autocomplete="off"
-                            >
-                        </td>
-                    </tr>
-
-                    <tr class="total-row">
-
-                        <td>
-                            Total Cost of Cover
-                        </td>
-
-                        <td id="total-v1">
-                            £0.00
-                        </td>
-
-                        <td id="total-v2">
-                            £0.00
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-    <!-- Footer -->
     <footer>
 
-        <button id="reset-btn" type="button">
-            ↺ Reset Calculator
-        </button>
+      <button id="reset-btn">
+        ↺ Reset calculator
+      </button>
 
-        <p class="footer-note">
-            Illustrative purposes only. Not a quote.
-        </p>
+      <p class="footer-note">
+        Illustrative purposes only. Not a quote.
+      </p>
 
     </footer>
 
-</div>
+  </div>
 
-<script>
-(function () {
+
+  <!-- JAVASCRIPT -->
+
+  <script>
+
+    /* -----------------------------------
+       ELEMENTS
+    ----------------------------------- */
+
+    const invoiceInput =
+      document.getElementById('invoice-price');
+
+    const futureInput =
+      document.getElementById('future-value');
+
+    const insuranceBar =
+      document.getElementById('insurance-bar');
+
+    const shortfallBar =
+      document.getElementById('shortfall-bar');
+
+    const insuranceBarAmount =
+      document.getElementById('insurance-bar-amount');
+
+    const shortfallBarAmount =
+      document.getElementById('shortfall-bar-amount');
+
+    const futureValueDisplay =
+      document.getElementById('future-value-display');
+
+    const shortfallDisplay =
+      document.getElementById('shortfall-display');
+
+    const resultAmount =
+      document.getElementById('result-amount');
+
+    const resetButton =
+      document.getElementById('reset-btn');
+
+
+    /* -----------------------------------
+       NUMBER PARSING
+    ----------------------------------- */
 
     function parseNumber(value) {
-        if (!value) return 0;
 
-        return parseFloat(
-            String(value).replace(/[^0-9.]/g, '')
-        ) || 0;
+      if (!value) {
+        return 0;
+      }
+
+      value = value
+        .toString()
+        .replace(/[^0-9.]/g, '');
+
+      return parseFloat(value) || 0;
     }
 
-    function formatCurrency(value, decimals) {
-        return '£' + Number(value).toLocaleString('en-GB', {
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals
-        });
-    }
 
-    /* Main calculator */
+    /* -----------------------------------
+       CURRENCY FORMATTING
+    ----------------------------------- */
 
-    var purchaseInput =
-        document.getElementById('purchase-price');
+    function formatCurrency(value, decimals = 0) {
 
-    var settlementInput =
-        document.getElementById('insurance-settlement');
-
-    var resultAmount =
-        document.getElementById('result-amount');
-
-    var settlementBar =
-        document.getElementById('bar-settlement');
-
-    var purchaseValue =
-        document.getElementById('bar-purchase-val');
-
-    var shortfallLabel =
-        document.getElementById('bar-shortfall-label');
-
-
-    function calculateMain() {
-
-        var purchase =
-            parseNumber(purchaseInput.value);
-
-        var settlement =
-            parseNumber(settlementInput.value);
-
-        var shortfall =
-            Math.max(0, purchase - settlement);
-
-
-        if (purchase > 0 || settlement > 0) {
-
-            resultAmount.textContent =
-                shortfall > 0
-                    ? formatCurrency(shortfall, 0)
-                    : 'No shortfall calculated';
-
-        } else {
-
-            resultAmount.textContent = '£0';
-
+      return '£' + value.toLocaleString(
+        'en-GB',
+        {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
         }
-
-
-        var percentage;
-
-        if (purchase > 0) {
-
-            percentage =
-                Math.min(
-                    Math.max((settlement / purchase) * 100, 0),
-                    100
-                );
-
-        } else {
-
-            percentage = 0;
-
-        }
-
-
-        settlementBar.style.width =
-            percentage + '%';
-
-
-        purchaseValue.textContent =
-            purchase > 0
-                ? formatCurrency(purchase, 0)
-                : '£0';
-
-
-        shortfallLabel.textContent =
-            shortfall > 0
-                ? 'Shortfall: ' + formatCurrency(shortfall, 0)
-                : 'No shortfall';
+      );
 
     }
 
 
-    purchaseInput.addEventListener(
-        'input',
-        calculateMain
+    /* -----------------------------------
+       MAIN CALCULATION
+    ----------------------------------- */
+
+    function calculate() {
+
+      const invoice =
+        parseNumber(invoiceInput.value);
+
+      const future =
+        parseNumber(futureInput.value);
+
+
+      /*
+       Potential shortfall is the difference
+       between the original invoice price and
+       estimated future value.
+      */
+
+      const shortfall =
+        Math.max(0, invoice - future);
+
+
+      /*
+       Calculate the percentage represented
+       by the estimated future value.
+      */
+
+      let futurePercentage = 60;
+
+      if (invoice > 0) {
+
+        futurePercentage =
+          Math.min(
+            Math.max((future / invoice) * 100, 0),
+            100
+          );
+
+      }
+
+
+      const shortfallPercentage =
+        100 - futurePercentage;
+
+
+      /* -----------------------------------
+         UPDATE BAR
+      ----------------------------------- */
+
+      insuranceBar.style.width =
+        futurePercentage + '%';
+
+      shortfallBar.style.width =
+        shortfallPercentage + '%';
+
+
+      /* -----------------------------------
+         UPDATE BAR VALUES
+      ----------------------------------- */
+
+      insuranceBarAmount.textContent =
+        future > 0
+          ? formatCurrency(future)
+          : '£0';
+
+      shortfallBarAmount.textContent =
+        shortfall > 0
+          ? formatCurrency(shortfall)
+          : '£0';
+
+
+      /* -----------------------------------
+         UPDATE DETAILS
+      ----------------------------------- */
+
+      futureValueDisplay.textContent =
+        future > 0
+          ? formatCurrency(future)
+          : '£0';
+
+      shortfallDisplay.textContent =
+        shortfall > 0
+          ? formatCurrency(shortfall)
+          : '£0';
+
+
+      /* -----------------------------------
+         UPDATE RESULT
+      ----------------------------------- */
+
+      if (invoice > 0 && future > 0) {
+
+        resultAmount.textContent =
+          formatCurrency(shortfall);
+
+      } else {
+
+        resultAmount.textContent =
+          '£0';
+
+      }
+
+    }
+
+
+    /* -----------------------------------
+       INPUT EVENTS
+    ----------------------------------- */
+
+    invoiceInput.addEventListener(
+      'input',
+      calculate
     );
 
-    settlementInput.addEventListener(
-        'input',
-        calculateMain
+    futureInput.addEventListener(
+      'input',
+      calculate
     );
 
 
-    /* Comparison calculator */
+    /* -----------------------------------
+       RESET
+    ----------------------------------- */
 
-    function calculateComparison() {
+    resetButton.addEventListener(
+      'click',
+      function() {
 
-        for (var column = 1; column <= 2; column++) {
+        invoiceInput.value = '';
+        futureInput.value = '';
 
-            var total = 0;
+        calculate();
 
-            var inputs =
-                document.querySelectorAll(
-                    '#compare-body input[data-col="' +
-                    column +
-                    '"]'
-                );
+        invoiceInput.focus();
 
-
-            inputs.forEach(function (input) {
-
-                if (input.dataset.row !== 'purchase') {
-
-                    total += parseNumber(input.value);
-
-                }
-
-            });
+      }
+    );
 
 
-            document.getElementById(
-                'total-v' + column
-            ).textContent =
-                formatCurrency(total, 2);
+    /* -----------------------------------
+       INITIAL CALCULATION
+    ----------------------------------- */
 
-        }
+    calculate();
 
-    }
-
-
-    document
-        .querySelectorAll('#compare-body input')
-        .forEach(function (input) {
-
-            input.addEventListener(
-                'input',
-                calculateComparison
-            );
-
-        });
-
-
-    /* Reset */
-
-    document
-        .getElementById('reset-btn')
-        .addEventListener('click', function () {
-
-            document
-                .querySelectorAll('input[type="text"]')
-                .forEach(function (input) {
-
-                    input.value = '';
-
-                });
-
-
-            calculateMain();
-            calculateComparison();
-
-        });
-
-
-    /* Initial state */
-
-    calculateMain();
-    calculateComparison();
-
-})();
-</script>
+  </script>
 
 </body>
 </html>
